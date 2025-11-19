@@ -1,0 +1,1617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="author" content="Ian Zambrano">
+<meta name="copyright" content="© 2025. All rights reserved.">
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Emergency Camp, Relief & Recovery Estimator</title>
+  <style>
+    :root {
+      --gap: 12px;
+      --card-bg: #ffffff;
+      --ink: #111827;
+      --muted: #6b7280;
+      --accent: #b91c1c; /* PRC Red */
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+      color: var(--ink);
+      background: #f3f4f6;
+    }
+
+/* ===== HERO BANNER (IMAGE) ===== */
+header {
+  background: var(--accent);
+  padding: 4px 0;          /* konting breathing room */
+}
+
+.hero-header {
+  width: 100%;
+  background: #b91c1c; /* PRC red background frame */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+}
+
+.hero-banner {
+  width: 100%;
+  height: auto;           /* full image preserved */
+  object-fit: contain;    /* shows the ENTIRE image */
+  display: block;
+}
+
+    /* ===== Tabs (navigation for calculators) ===== */
+    .tabs {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: #e5e7eb;
+      border-bottom: 1px solid #d1d5db;
+      padding: 6px 20px;
+    }
+    .tabs-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      border: none;
+      background: transparent;
+      color: #374151;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .tab-btn:hover {
+      background: rgba(0,0,0,0.05);
+    }
+    .tab-btn.active {
+      background: #b91c1c;
+      color: #fff;
+    }
+
+  /* ----- HOMEPAGE IMPROVEMENTS ----- */
+
+.home-container {
+  max-width: 1100px;
+  margin: 30px auto;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.home-title {
+  font-size: 26px;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.home-desc {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333;
+  margin: 0 auto;
+  max-width: 900px;
+}
+
+.wecanhelp-title {
+  margin-top: 40px;
+  font-size: 28px;
+  font-weight: 900;
+}
+
+.wecanhelp-title span {
+  color: var(--accent);
+}
+
+.feature-grid {
+  margin-top: 30px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 15px;
+}
+
+.feature-card {
+  background: #ffffff;
+  padding: 24px 18px;
+  border-radius: 16px;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.10); /* mas kita na shadow */
+  border: 1px solid #e5e7eb;                      /* subtle na outline */
+  text-align: center;                             /* title at intro = center */
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.feature-card img {
+  width: 90px;
+  margin-bottom: 10px;
+}
+
+
+.feature-card h3 {
+  font-size: 15px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  color: #b91c1c;
+}
+
+.feature-card ul {
+  padding-left: 20px;
+  margin: 0;
+  line-height: 1.4;
+}
+
+    /* ===== Layout & Cards for calculators ===== */
+    .wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 20px;
+      display: grid; grid-template-columns: 380px 1fr;
+      gap: var(--gap); align-items: start;
+    }
+    @media (max-width: 980px){ .wrap { grid-template-columns: 1fr; } }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: 0 10px 20px rgba(0,0,0,.06);
+      padding: 16px;
+    }
+    .card h2 { font-size: 16px; margin: 0 0 12px; }
+
+    label { display:block; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+    input[type="number"], input[type="text"], select {
+      width: 100%; border: 1px solid #e5e7eb; padding: 10px 12px; border-radius: 10px; font-size: 14px;
+    }
+    .btn {
+      display:inline-flex; gap:8px; align-items:center; background: var(--accent); color: #fff;
+      border:0; padding: 10px 14px; border-radius: 10px; cursor: pointer; font-weight: 600; margin-top:10px;
+    }
+    .btn.secondary { background:#dc2626; }
+    .row { display:grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .convert { font-size: 12px; color: var(--muted); margin-top: 8px; min-height: 18px; }
+    table { width:100%; border-collapse:collapse; text-align:center; }
+    th, td { border:1px solid #e5e7eb; padding:6px; }
+    th { background:#f1f5f9; }
+    small.muted { color:#6b7280; }
+
+    .view { display:none; }
+    .view.active { display:block; }
+
+    /* ===== Print ===== */
+    @media print {
+      body { background:#fff; }
+      header {
+        background: #b91c1c !important; color:#fff !important;
+        -webkit-print-color-adjust: exact; print-color-adjust: exact;
+      }
+      .tabs,
+      #home { display:none !important; }
+      .wrap { padding:16px; }
+      .card { box-shadow:none; border:0; padding:0; }
+
+      #inputsCard,
+      #reliefInputsCard,
+      #washInputsCard,
+      #burialInputsCard,
+      #recoveryInputsCard {
+        display:none;
+      }
+
+      #printHeader,
+      #reliefPrintHeader,
+      #washPrintHeader,
+      #burialPrintHeader,
+      #recoveryPrintHeader {
+        display:block; margin: 10px 0 12px; font-size:12px; color:#111827;
+      }
+
+      #resultsCard h2,
+      #reliefResultsCard h2,
+      #washResultsCard h2,
+      #burialResultsCard h2,
+      #recoveryResultsCard h2 { margin: 6px 0; }
+
+      .btn { display:none !important; }
+      table { page-break-inside:auto; }
+      tr { page-break-inside:avoid; page-break-after:auto; }
+    }
+  </style>
+</head>
+<body>
+  <!-- HERO BANNER -->
+ <header class="hero-header">
+  <img src="banner2.png" alt="Emergency Camp, Relief & Recovery Estimator" class="hero-banner">
+</header>
+
+
+  <!-- TABS (TOP NAVIGATION) -->
+  <nav class="tabs">
+    <div class="tabs-inner">
+      <button class="tab-btn active" data-tab="home">Home</button>
+      <button class="tab-btn" data-tab="tents">Tent City Estimator</button>
+      <button class="tab-btn" data-tab="relief">Relief Estimator</button>
+      <button class="tab-btn" data-tab="wash">WASH (Outside EC)</button>
+      <button class="tab-btn" data-tab="burial">Management of the Dead</button>
+      <button class="tab-btn" data-tab="recovery">Shelter in Recovery</button>
+    </div>
+  </nav>
+
+ <section id="home" class="view active">
+  <div class="home-container">
+
+    <h2 class="home-title">"Plan Better, Respond Faster"</h2>
+
+    <p class="home-desc">
+      This tool is designed for rapid, standards-based planning by the Philippine Red Cross during 
+      disaster response and early recovery. It integrates core humanitarian standards (Sphere, UNHCR) 
+      and PRC operational practices to quickly estimate the required area, resources, and essential 
+      services for various components—camp setup, relief distribution, WASH support, 
+      Management of the Dead, and recovery shelter layout.
+      <br><br>
+      It is built for rapid assessments, camp planning, relief requisitioning, service estimation, 
+      and field-level decision-making, especially when time and data on the ground are limited.
+    </p>
+
+   <h2 class="wecanhelp-title">
+  What This Tool <span class="can-do">Can Do</span>
+</h2>
+
+    <div class="feature-grid">
+
+    <div class="feature-card">
+  <img src="icon/tent.png" class="feature-icon">
+    <h3>TENT CITY ESTIMATOR</h3>
+    <p>
+        Used to compute camp capacity, required land area, and essential services for evacuation 
+        sites or tent cities. It follows Sphere Standards, including:
+    </p>
+    <ul>
+        <li>Covered living space per person</li>
+        <li>Tent and block layout</li>
+        <li>WASH ratios (toilets, bathing, tap stands, washbasins)</li>
+        <li>Solid waste generation</li>
+        <li>Health posts, TLS & Red Cross team requirements</li>
+    </ul>
+</div>
+
+    <div class="feature-card">
+  <img src="icon/relief.png" class="feature-icon">
+    <h3>RELIEF ESTIMATOR</h3>
+    <p>
+        Used for quick computation of food and non-food item (NFI) requirements based on affected 
+        and vulnerable families. It generates estimates for:
+    </p>
+    <ul>
+        <li>Standard food packs</li>
+        <li>Hygiene kits</li>
+        <li>Sleeping kits</li>
+        <li>Kitchen sets</li>
+        <li>Total cost requirements</li>
+    </ul>
+    <p>Includes automatic cost calculations for logistics planning.</p>
+</div>
+
+    <div class="feature-card">
+  <img src="icon/wash.png" class="feature-icon">
+    <h3>WASH (OUTSIDE EC)</h3>
+    <p>
+        Computes minimum daily water requirements for affected populations outside evacuation 
+        centers. Features include:
+    </p>
+    <ul>
+        <li>Liters per person per day (15 L/person/day)</li>
+        <li>Tap stand requirements</li>
+        <li>Total water volume needed (liters & m³)</li>
+    </ul>
+    <p>Supports community-based WASH interventions aligned with Sphere Standards.</p>
+</div>
+
+    <div class="feature-card">
+  <img src="icon/burial.png" class="feature-icon">
+    <h3>MANAGEMENT OF THE DEAD</h3>
+    <p>
+        Focuses on planning for the management of the dead and missing (MDM). Provides estimates for:
+    </p>
+    <ul>
+        <li>Muslim and non-Muslim burial allocations</li>
+        <li>Total cemetery area requirements</li>
+        <li>Distance guidelines from water sources & settlements</li>
+        <li>Safe grave depth, spacing & site layout</li>
+    </ul>
+    <p>Aligned with PAHO, ICRC, WEDC guidelines.</p>
+</div>
+
+    <div class="feature-card">
+  <img src="icon/shelter.png" class="feature-icon">
+    <h3>SHELTER IN RECOVERY</h3>
+    <p>
+        Estimates settlement layout and plot capacity for recovery-phase shelter areas. Based on:
+    </p>
+    <ul>
+        <li>10 × 10 m lot size</li>
+        <li>3.5 × 6.0 m house footprint</li>
+        <li>≥3.5 m² per person covered space</li>
+        <li>Access roads, block spacing & cluster separation</li>
+    </ul>
+    <p>
+        Computes via number of households or total site area.
+    </p>
+</div>
+
+
+  </div>
+</section>
+
+
+  <!-- ===== TENT CITY TAB ===== -->
+  <section id="tents" class="view">
+    <main class="wrap">
+      <!-- CAMP INPUTS -->
+      <section id="inputsCard" class="card">
+        <h2>Camp Input (Tent City)</h2>
+
+        <!-- Location details for camp -->
+        <h3 style="font-size:13px;margin:6px 0 6px;">Location Details (Camp)</h3>
+        <div class="row">
+          <div>
+            <label for="cProvince">Province</label>
+            <input id="cProvince" type="text" />
+          </div>
+          <div>
+            <label for="cMunicipality">City / Municipality</label>
+            <input id="cMunicipality" type="text" />
+          </div>
+        </div>
+        <div class="row" style="grid-template-columns: 1fr;">
+          <div>
+            <label for="cBarangay">Barangay</label>
+            <input id="cBarangay" type="text" />
+          </div>
+        </div>
+
+        <hr style="margin:14px 0;border:none;border-top:1px solid #e5e7eb;">
+
+        <label for="mode">Mode</label>
+        <select id="mode">
+          <option value="area">Area-based (m² / ha)</option>
+          <option value="rect">Area-based (Length × Width in meters)</option>
+          <option value="families">Families-based (compute required area)</option>
+          <option value="individuals">Individuals-based (compute required area)</option>
+        </select>
+
+        <!-- AREA INPUTS (m² / ha) -->
+        <div id="areaInputs">
+          <div class="row">
+            <div>
+              <label for="area">Total site area</label>
+              <input id="area" type="number" placeholder="Enter value" min="0" step="0.01" />
+            </div>
+            <div>
+              <label for="unit">Select unit</label>
+              <select id="unit">
+                <option value="sqm">Square meters (m²)</option>
+                <option value="ha">Hectares (ha)</option>
+              </select>
+            </div>
+          </div>
+          <div class="convert" id="conversionNote">&nbsp;</div>
+        </div>
+
+        <!-- RECTANGULAR INPUTS (meters) -->
+        <div id="rectInputs" style="display:none;">
+          <div class="row">
+            <div>
+              <label for="length">Length of site (m)</label>
+              <input id="length" type="number" min="0" step="0.1" placeholder="e.g., 200" />
+            </div>
+            <div>
+              <label for="width">Width of site (m)</label>
+              <input id="width" type="number" min="0" step="0.1" placeholder="e.g., 150" />
+            </div>
+          </div>
+          <div class="convert" id="rectNote">&nbsp;</div>
+        </div>
+
+        <!-- FAMILIES INPUTS -->
+        <div id="familyInputs" style="display:none;">
+          <div class="row">
+            <div>
+              <label for="families">Number of families</label>
+              <input id="families" type="number" placeholder="e.g., 200" min="1" step="1" />
+            </div>
+          </div>
+          <div class="convert" id="familiesNote">&nbsp;</div>
+        </div>
+
+        <!-- INDIVIDUALS INPUTS -->
+        <div id="peopleInputs" style="display:none;">
+          <div class="row" style="grid-template-columns: 1fr;">
+            <div>
+              <label for="peopleCount">Number of individuals</label>
+              <input id="peopleCount" type="number" placeholder="e.g., 1,000" min="1" step="1" />
+            </div>
+          </div>
+          <div class="convert" id="peopleNote">&nbsp;</div>
+        </div>
+
+        <!-- SOLID WASTE SETTINGS -->
+        <h3 style="font-size:13px;margin:16px 0 6px;">Solid Waste Settings</h3>
+        <div class="row">
+          <div>
+            <label for="wasteRate">Per-person waste (kg/day)</label>
+            <input id="wasteRate" type="number" min="0" step="0.01" value="0.8" />
+          </div>
+          <div>
+            <label for="collectDays">Collection interval (days)</label>
+            <input id="collectDays" type="number" min="1" step="1" value="1" />
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label for="density">Waste density (kg/m³)</label>
+            <input id="density" type="number" min="50" step="10" value="200" />
+          </div>
+          <div>
+            <label for="truckType">Truck type (standard volume)</label>
+            <select id="truckType">
+              <option value="3">Mini Dump — 3 m³</option>
+              <option value="6">Dump — 6 m³</option>
+              <option value="10" selected>Compactor — 10 m³</option>
+              <option value="15">Compactor — 15 m³</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label for="loadFactor">Load factor (%)</label>
+            <input id="loadFactor" type="number" min="50" max="100" step="5" value="85" />
+          </div>
+          <div>
+            <label>&nbsp;</label>
+            <div class="convert">kg → m³ = kg / density; ÷ usable truck m³.</div>
+          </div>
+        </div>
+
+        <div class="row" style="grid-template-columns: 1fr 1fr; margin-top:8px;">
+          <button class="btn" id="compute">Compute</button>
+          <button class="btn secondary" id="downloadPdf">Download PDF</button>
+        </div>
+
+        <p class="convert">
+          <b>Assumptions:</b> 5 persons/tent, 4 tents/block; toilets 1:20 (split M/F), bathing 1:50 (split M/F);
+          community kitchens ~1:50 people; tap stands 1:250 people; washbasins 1:10–15 people; trash bins 1×100-L/10 families;
+          <b>health posts 1:10,000 people</b>; <b>TLS: 25% of pop ÷ 60 learners</b>; <b>team offices 1:5,000 people</b>.
+        </p>
+      </section>
+
+      <!-- CAMP RESULTS -->
+      <section id="resultsCard" class="card">
+        <h2>Camp Results (Acceptable → Ideal Range)</h2>
+        <p class="convert">Figures are grouped by <b>PRC services</b>.</p>
+        <div id="printHeader" style="display:none"></div>
+        <div id="results"></div>
+      </section>
+    </main>
+  </section>
+
+  <!-- ===== RELIEF TAB ===== -->
+  <section id="relief" class="view">
+    <main class="wrap">
+      <section id="reliefInputsCard" class="card">
+        <h2>Relief Input (Food &amp; NFIs)</h2>
+
+        <h3 style="font-size:13px;margin:6px 0 6px;">Location Details (Relief)</h3>
+        <div class="row">
+          <div>
+            <label for="rProvince">Province</label>
+            <input id="rProvince" type="text" />
+          </div>
+          <div>
+            <label for="rMunicipality">City / Municipality</label>
+            <input id="rMunicipality" type="text" />
+          </div>
+        </div>
+        <div class="row" style="grid-template-columns: 1fr;">
+          <div>
+            <label for="rBarangay">Barangay</label>
+            <input id="rBarangay" type="text" />
+          </div>
+        </div>
+
+        <hr style="margin:14px 0;border:none;border-top:1px solid #e5e7eb;">
+
+        <div class="row">
+          <div>
+            <label for="rFamilies">Affected families</label>
+            <input id="rFamilies" type="number" min="1" step="1" placeholder="e.g., 1,000" />
+          </div>
+          <div>
+            <label for="rVulnPct">Vulnerability / Poverty incidence (%)</label>
+            <input id="rVulnPct" type="number" min="1" max="100" step="1" value="30" />
+          </div>
+        </div>
+
+        <h3 style="margin-top:20px;">Cost Estimates (₱ per kit)</h3>
+        <div class="row">
+          <div>
+            <label for="cHygiene">Hygiene Kit (₱)</label>
+            <input id="cHygiene" type="number" min="0" step="0.01" value="350" />
+          </div>
+          <div>
+            <label for="cKitchen">Kitchen Set (₱)</label>
+            <input id="cKitchen" type="number" min="0" step="0.01" value="900" />
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label for="cSleeping">Sleeping Kit (₱)</label>
+            <input id="cSleeping" type="number" min="0" step="0.01" value="650" />
+          </div>
+          <div>
+            <label for="cFood">Food Pack (₱)</label>
+            <input id="cFood" type="number" min="0" step="0.01" value="550" />
+          </div>
+        </div>
+
+        <div class="row" style="grid-template-columns: 1fr 1fr; margin-top:8px;">
+          <button class="btn" id="rCompute">Compute Relief</button>
+          <button class="btn secondary" id="rDownloadPdf">Download PDF</button>
+        </div>
+      </section>
+
+      <section id="reliefResultsCard" class="card">
+        <h2>Relief Computation Results</h2>
+        <div id="reliefPrintHeader" style="display:none"></div>
+        <div id="reliefResults"></div>
+      </section>
+    </main>
+  </section>
+
+  <!-- ===== WASH TAB ===== -->
+  <section id="wash" class="view">
+    <main class="wrap">
+      <section id="washInputsCard" class="card">
+        <h2>WASH Input (Outside Evacuation Centres)</h2>
+
+        <h3 style="font-size:13px;margin:6px 0 6px;">Location Details (Community)</h3>
+        <div class="row">
+          <div>
+            <label for="wProvince">Province</label>
+            <input id="wProvince" type="text" />
+          </div>
+          <div>
+            <label for="wMunicipality">City / Municipality</label>
+            <input id="wMunicipality" type="text" />
+          </div>
+        </div>
+        <div class="row" style="grid-template-columns: 1fr;">
+          <div>
+            <label for="wBarangay">Barangay</label>
+            <input id="wBarangay" type="text" />
+          </div>
+        </div>
+
+        <hr style="margin:14px 0;border:none;border-top:1px solid #e5e7eb;">
+
+       <div class="row">
+  <div>
+    <label for="wInputType">Input type</label>
+    <select id="wInputType">
+      <option value="individuals" selected>Affected individuals (outside EC)</option>
+      <option value="families">Number of families affected</option>
+    </select>
+  </div>
+</div>
+
+<div class="row">
+  <div>
+    <label for="wPeople">Enter number</label>
+    <input id="wPeople" type="number" min="1" step="1" placeholder="e.g., 2,500" />
+  </div>
+</div>
+
+
+        <p class="convert">
+          Sphere minimum for water is <b>15 L/person/day</b>.
+          Tap stands are calculated at <b>1:250 people</b>.
+          Sanitation (toilets, bathing, washbasins) is covered under the camp management tab.
+        </p>
+
+        <div class="row" style="grid-template-columns: 1fr 1fr; margin-top:8px;">
+          <button class="btn" id="wCompute">Compute WASH</button>
+          <button class="btn secondary" id="wDownloadPdf">Download PDF</button>
+        </div>
+      </section>
+
+      <section id="washResultsCard" class="card">
+        <h2>WASH Needs (Outside EC)</h2>
+        <div id="washPrintHeader" style="display:none"></div>
+        <div id="washResults"></div>
+      </section>
+    </main>
+  </section>
+
+  <!-- ===== MANAGEMENT OF THE DEAD TAB ===== -->
+  <section id="burial" class="view">
+    <main class="wrap">
+      <section id="burialInputsCard" class="card">
+        <h2>Management of the Dead — Input</h2>
+
+        <h3 style="font-size:13px;margin:6px 0 6px;">Location Details (MDM Site)</h3>
+        <div class="row">
+          <div>
+            <label for="bProvince">Province</label>
+            <input id="bProvince" type="text" />
+          </div>
+          <div>
+            <label for="bMunicipality">City / Municipality</label>
+            <input id="bMunicipality" type="text" />
+          </div>
+        </div>
+        <div class="row" style="grid-template-columns: 1fr;">
+          <div>
+            <label for="bBarangay">Barangay</label>
+            <input id="bBarangay" type="text" />
+          </div>
+        </div>
+
+        <hr style="margin:14px 0;border:none;border-top:1px solid #e5e7eb;">
+
+        <div class="row">
+          <div>
+            <label for="bPopulation">Population served (optional)</label>
+            <input id="bPopulation" type="number" min="0" step="1" placeholder="e.g., 50,000" />
+          </div>
+          <div>
+            <label for="bBodies">Estimated number of bodies for burial</label>
+            <input id="bBodies" type="number" min="1" step="1" placeholder="e.g., 120" />
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:8px;">
+          <div>
+            <label for="bMuslim">Muslim burials (separate area)</label>
+            <input id="bMuslim" type="number" min="0" step="1" placeholder="e.g., 20" />
+          </div>
+          <div>
+            <label for="bNonMuslim">Non-Muslim burials</label>
+            <input id="bNonMuslim" type="number" min="0" step="1" placeholder="Auto-calculated" disabled />
+          </div>
+        </div>
+
+        <p class="convert">
+          Planner uses common humanitarian guidance: distance to <b>drinking-water sources</b> depends on approximate
+          number of bodies; distance to <b>settlement</b> &amp; vertical separation from groundwater follow ICRC / PAHO /
+          WEDC-type recommendations. Muslim graves must be kept in a separate section, oriented to Qibla, and
+          not mixed with non-Muslim burials.
+        </p>
+
+        <div class="row" style="grid-template-columns: 1fr 1fr; margin-top:8px;">
+          <button class="btn" id="bCompute">Compute MDM Plan</button>
+          <button class="btn secondary" id="bDownloadPdf">Download PDF</button>
+        </div>
+      </section>
+
+      <section id="burialResultsCard" class="card">
+        <h2>Management of the Dead — Results</h2>
+        <div id="burialPrintHeader" style="display:none"></div>
+        <div id="burialResults"></div>
+      </section>
+    </main>
+  </section>
+
+  <!-- ===== SHELTER IN RECOVERY TAB ===== -->
+  <section id="recovery" class="view">
+    <main class="wrap">
+      <section id="recoveryInputsCard" class="card">
+        <h2>Shelter in Recovery — Input</h2>
+
+        <h3 style="font-size:13px;margin:6px 0 6px;">Location Details (Recovery Site)</h3>
+        <div class="row">
+          <div>
+            <label for="recProvince">Province</label>
+            <input id="recProvince" type="text" />
+          </div>
+          <div>
+            <label for="recMunicipality">City / Municipality</label>
+            <input id="recMunicipality" type="text" />
+          </div>
+        </div>
+        <div class="row" style="grid-template-columns: 1fr;">
+          <div>
+            <label for="recBarangay">Barangay</label>
+            <input id="recBarangay" type="text" />
+          </div>
+        </div>
+
+        <hr style="margin:14px 0;border:none;border-top:1px solid #e5e7eb;">
+
+        <label for="recMode">Mode</label>
+        <select id="recMode">
+          <option value="households">By number of households</option>
+          <option value="area">By site area (ha / m² / meters)</option>
+        </select>
+
+        <!-- HOUSEHOLD-BASED INPUTS -->
+        <div id="recHouseholdInputs">
+          <div class="row" style="margin-top:8px;">
+            <div>
+              <label for="recHouseholds">Number of households to be rehoused</label>
+              <input id="recHouseholds" type="number" min="1" step="1" placeholder="e.g., 150" />
+            </div>
+          </div>
+        </div>
+
+        <!-- AREA-BASED INPUTS -->
+        <div id="recAreaInputs" style="display:none; margin-top:8px;">
+          <div class="row">
+            <div>
+              <label for="recAreaType">Area input type</label>
+              <select id="recAreaType">
+                <option value="sqm">Total area in square meters (m²)</option>
+                <option value="ha">Total area in hectares (ha)</option>
+                <option value="rect">Length × Width in meters</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="recAreaValueRow" style="margin-top:8px;">
+            <div class="row">
+              <div>
+                <label for="recAreaValue">Site area</label>
+                <input id="recAreaValue" type="number" min="0" step="0.01" placeholder="e.g., 2.5" />
+              </div>
+            </div>
+          </div>
+
+          <div id="recRectRow" style="display:none; margin-top:8px;">
+            <div class="row">
+              <div>
+                <label for="recLength">Length of site (m)</label>
+                <input id="recLength" type="number" min="0" step="0.1" placeholder="e.g., 250" />
+              </div>
+              <div>
+                <label for="recWidth">Width of site (m)</label>
+                <input id="recWidth" type="number" min="0" step="0.1" placeholder="e.g., 200" />
+              </div>
+            </div>
+          </div>
+
+          <div class="convert" id="recAreaNote">&nbsp;</div>
+        </div>
+
+        <p class="convert">
+          Planning assumptions for recovery:
+          <br>• <b>Lot size:</b> 10 m × 10 m = 100 m² per household
+          <br>• <b>House footprint:</b> 3.5 m × 6.0 m = 21 m² per household
+          <br>• Assumed occupancy: <b>5 persons per household</b> (fixed)
+          <br>• Sphere/UNHCR: ≥3.5 m² of covered living space per person; shelters ≥2 m apart; wider separations between clusters and blocks; access roads wide enough for emergency vehicles.
+        </p>
+
+        <div class="row" style="grid-template-columns: 1fr 1fr; margin-top:8px;">
+          <button class="btn" id="recCompute">Compute Recovery Layout</button>
+          <button class="btn secondary" id="recDownloadPdf">Download PDF</button>
+        </div>
+      </section>
+
+      <section id="recoveryResultsCard" class="card">
+        <h2>Shelter in Recovery — Results</h2>
+        <div id="recoveryPrintHeader" style="display:none"></div>
+        <div id="recoveryResults"></div>
+      </section>
+    </main>
+  </section>
+
+  <script>
+    /* -------- Tabs -------- */
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const views = document.querySelectorAll('.view');
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabButtons.forEach(b => b.classList.remove('active'));
+        views.forEach(v => v.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+
+    /* -------- Shared Helpers -------- */
+    const el = id => document.getElementById(id);
+    const ceil = n => Math.ceil(n);
+
+    /* ===================== CAMP / TENT CITY LOGIC ===================== */
+    function computeCaseFromPeople(people, sqmPerPerson){
+      const ppTent = 5;
+      const tents = ceil(people / ppTent);
+      const blocks = ceil(tents / 4);
+
+      const toiletsTotal = ceil(people / 20);
+      const bathsTotal   = ceil(people / 50);
+
+      const toiletsFemale = ceil(toiletsTotal / 2);
+      const toiletsMale   = toiletsTotal - toiletsFemale;
+      const bathsFemale   = ceil(bathsTotal / 2);
+      const bathsMale     = bathsTotal - bathsFemale;
+
+      const kitchens = ceil(people / 50);
+      const families = ceil(people / 5);
+
+      const tapStands     = ceil(people / 250);
+      const washbasinsMin = ceil(people / 15);
+      const washbasinsMax = ceil(people / 10);
+      const trashBins100L = ceil(families / 10);
+
+      const learners    = ceil(people * 0.25);
+      const tls         = ceil(learners / 60);
+      const healthPosts = ceil(people / 10000);
+      const teamOffices = ceil(people / 5000);
+
+      const wasteRate   = Math.max(0, parseFloat(el('wasteRate').value) || 0.8);
+      const collectDays = Math.max(1, parseInt(el('collectDays').value,10) || 1);
+      const density     = Math.max(50, parseFloat(el('density').value) || 200);
+      const truckVolM3  = Math.max(1, parseFloat(el('truckType').value) || 10);
+      const loadFactor  = Math.min(100, Math.max(50, parseFloat(el('loadFactor').value) || 85));
+
+      const dailyWasteKg      = people * wasteRate;
+      const perCollectionKg   = dailyWasteKg * collectDays;
+      const perCollectionM3   = perCollectionKg / density;
+      const usableTruckM3     = truckVolM3 * (loadFactor / 100);
+      const trucksPerCollection = Math.ceil(perCollectionM3 / usableTruckM3);
+
+      const requiredSqm = people * sqmPerPerson;
+      const requiredHa  = requiredSqm / 10000;
+
+      return {
+        sqmPerPerson, people, tents, blocks,
+        toiletsTotal, toiletsFemale, toiletsMale,
+        bathsTotal, bathsFemale, bathsMale,
+        kitchens, families,
+        requiredSqm, requiredHa,
+        tapStands, washbasinsMin, washbasinsMax, trashBins100L,
+        learners, tls, healthPosts, teamOffices,
+        dailyWasteKg, perCollectionM3, trucksPerCollection
+      };
+    }
+
+    function renderTable(cases, showRequiredArea){
+      const buildTable = (title, rows) => {
+        let html = `<h3 style="margin:14px 0 6px;">${title}</h3>`;
+        html += '<table><tr><th>Parameter</th>'
+          + '<th>Case 1<br>(30 m²/person)</th>'
+          + '<th>Case 2<br>(35 m²/person)</th>'
+          + '<th>Case 3<br>(40 m²/person)</th>'
+          + '<th>Case 4<br>(45 m²/person)</th></tr>';
+        for (const [label, fmt] of rows){
+          html += '<tr><td>'+label+'</td>' +
+            cases.map(c => '<td>'+ (typeof fmt==='function'? fmt(c): c[fmt]) +'</td>').join('') +
+            '</tr>';
+        }
+        html += '</table>';
+        return html;
+      };
+
+      const shelterRows = [];
+      if (showRequiredArea){
+        shelterRows.push(['Required Area (m²)', (c)=>c.requiredSqm.toLocaleString()]);
+        shelterRows.push(['Required Area (ha)', (c)=>c.requiredHa.toFixed(2)]);
+      }
+      shelterRows.push(['Estimated People', (c)=>c.people.toLocaleString()]);
+      shelterRows.push(['Families', (c)=>c.families.toLocaleString()]);
+      shelterRows.push(['Tents', (c)=>c.tents.toLocaleString()]);
+      shelterRows.push(['Blocks', (c)=>c.blocks.toLocaleString()]);
+      shelterRows.push(['Community Kitchens (~1:50 ppl)', (c)=>c.kitchens.toLocaleString()]);
+
+      const washRows = [];
+      washRows.push(['Toilets (1:20)', (c)=>c.toiletsTotal.toLocaleString()]);
+      washRows.push(['Bathing (1:50)', (c)=>c.bathsTotal.toLocaleString()]);
+      washRows.push(['Tap Stands (1:250 ppl)', (c)=>c.tapStands.toLocaleString()]);
+      washRows.push(['Washbasins (1:10–15 ppl)', (c)=>`${c.washbasinsMin.toLocaleString()}–${c.washbasinsMax.toLocaleString()}`]);
+      washRows.push(['Trash Bins (1/10 families)', (c)=>c.trashBins100L.toLocaleString()]);
+
+      const swmRows = [];
+      swmRows.push(['Daily Waste (kg/day)', (c)=>c.dailyWasteKg.toLocaleString()]);
+      swmRows.push(['Waste per Collection (m³)', (c)=>c.perCollectionM3.toFixed(2)]);
+      swmRows.push(['Required Trucks / Collection', (c)=>c.trucksPerCollection.toLocaleString()]);
+
+      const healthRows   = [['Health Posts (1:10,000)', (c)=>c.healthPosts.toLocaleString()]];
+      const welfareRows  = [['Learners (≈25% of pop)', (c)=>c.learners.toLocaleString()],
+                             ['Temporary Learning Spaces (÷60)', (c)=>c.tls.toLocaleString()]];
+      const adminRows    = [['Team Offices (1:5,000)', (c)=>c.teamOffices.toLocaleString()]];
+
+      let out = '';
+      out += buildTable('Shelter / Relief Services', shelterRows);
+      out += buildTable('WASH (Water, Sanitation & Hygiene)', washRows);
+      out += buildTable('Solid Waste Management', swmRows);
+      out += buildTable('Health Services', healthRows);
+      out += buildTable('Welfare / Education Services', welfareRows);
+      out += buildTable('Red Cross Team / Admin', adminRows);
+      el('results').innerHTML = out;
+    }
+
+    function buildPrintHeader(ctx){
+      const now = new Date();
+      const stamp = now.toLocaleString();
+      const lines = [`<strong>Camp Computation Summary</strong>`, `<div><b>Generated:</b> ${stamp}</div>`];
+
+      const prov = el('cProvince').value.trim();
+      const mun  = el('cMunicipality').value.trim();
+      const brgy = el('cBarangay').value.trim();
+      const locParts = [brgy, mun, prov].filter(Boolean);
+      if (locParts.length){
+        lines.push(`<div><b>Location:</b> ${locParts.join(', ')}</div>`);
+      }
+
+      if (ctx.mode === 'area'){
+        lines.push(`<div><b>Mode:</b> Area-based (m² / ha)</div>`);
+        lines.push(`<div><b>Input:</b> ${ctx.inputVal.toLocaleString()} ${ctx.unit}</div>`);
+      } else if (ctx.mode === 'rect'){
+        lines.push(`<div><b>Mode:</b> Area-based (Length × Width)</div>`);
+        lines.push(`<div><b>Input:</b> ${ctx.length} m × ${ctx.width} m = ${ctx.areaSqm.toLocaleString()} m²</div>`);
+      } else if (ctx.mode === 'families'){
+        lines.push(`<div><b>Mode:</b> Families-based</div>`);
+        lines.push(`<div><b>Families:</b> ${ctx.families.toLocaleString()} (${ctx.people.toLocaleString()} people)</div>`);
+      } else if (ctx.mode === 'individuals'){
+        lines.push(`<div><b>Mode:</b> Individuals-based</div>`);
+        lines.push(`<div><b>People:</b> ${ctx.people.toLocaleString()}</div>`);
+      }
+      el('printHeader').innerHTML = lines.join('');
+      el('printHeader').style.display = 'block';
+    }
+
+    function computeAreaMode(){
+      let area = parseFloat(el('area').value);
+      const unit = el('unit').value;
+      if (!area || area <= 0) { alert('Please enter a valid site area.'); return; }
+      const areaSqm = unit === 'ha' ? area * 10000 : area;
+
+      el('conversionNote').innerHTML =
+        unit === 'ha'
+          ? `${area.toLocaleString()} ha = <b>${(areaSqm).toLocaleString()}</b> m²`
+          : `${area.toLocaleString()} m² = <b>${(area/10000).toFixed(2)}</b> ha`;
+
+      const cases = [30,35,40,45].map(v => computeCaseFromPeople(Math.floor(areaSqm / v), v));
+      renderTable(cases, false);
+      buildPrintHeader({ mode:'area', inputVal: area, unit });
+    }
+
+    function computeRectMode(){
+      const length = parseFloat(el('length').value);
+      const width  = parseFloat(el('width').value);
+      if (!length || length <= 0 || !width || width <= 0){
+        alert('Please enter valid length and width in meters.');
+        return;
+      }
+      const areaSqm = length * width;
+      el('rectNote').innerHTML = `${length} m × ${width} m = <b>${areaSqm.toLocaleString()}</b> m² (${(areaSqm/10000).toFixed(2)} ha)`;
+
+      const cases = [30,35,40,45].map(v => computeCaseFromPeople(Math.floor(areaSqm / v), v));
+      renderTable(cases, false);
+      buildPrintHeader({ mode:'rect', length, width, areaSqm });
+    }
+
+    function computeFamiliesMode(){
+      const families = parseInt(el('families').value,10);
+      const ppFamily = 5;
+      if (!families || families <= 0) { alert('Please enter a valid number of families.'); return; }
+      const people = families * ppFamily;
+      el('familiesNote').innerHTML = `${families.toLocaleString()} families × ${ppFamily} pp/family = <b>${people.toLocaleString()}</b> people`;
+
+      const cases = [30,35,40,45].map(v => computeCaseFromPeople(people, v));
+      renderTable(cases, true);
+      buildPrintHeader({ mode:'families', families, people });
+    }
+
+    function computeIndividualsMode(){
+      const people = parseInt(el('peopleCount').value, 10);
+      if (!people || people <= 0){
+        alert('Please enter a valid number of individuals.');
+        return;
+      }
+      el('peopleNote').innerHTML = `${people.toLocaleString()} individuals will be used for all four planning cases.`;
+      const cases = [30,35,40,45].map(v => computeCaseFromPeople(people, v));
+      renderTable(cases, true);
+      buildPrintHeader({ mode:'individuals', people });
+    }
+
+    function updateVisibility(){
+      const mode = el('mode').value;
+      el('areaInputs').style.display   = mode === 'area' ? 'block' : 'none';
+      el('rectInputs').style.display   = mode === 'rect' ? 'block' : 'none';
+      el('familyInputs').style.display = mode === 'families' ? 'block' : 'none';
+      el('peopleInputs').style.display = mode === 'individuals' ? 'block' : 'none';
+
+      el('conversionNote').innerHTML = '&nbsp;';
+      el('rectNote').innerHTML = '&nbsp;';
+      el('familiesNote').innerHTML = '&nbsp;';
+      el('peopleNote').innerHTML = '&nbsp;';
+      el('results').innerHTML = '';
+      el('printHeader').style.display = 'none';
+    }
+
+    function onCompute(){
+      const mode = el('mode').value;
+      if (mode === 'area') computeAreaMode();
+      else if (mode === 'rect') computeRectMode();
+      else if (mode === 'families') computeFamiliesMode();
+      else if (mode === 'individuals') computeIndividualsMode();
+    }
+
+    function onDownload(){
+      if (!el('results').innerHTML.trim()){
+        alert('Please compute camp results first before exporting to PDF.');
+        return;
+      }
+      window.print();
+    }
+
+    /* ===================== RELIEF ESTIMATOR LOGIC ===================== */
+    function computeRelief(){
+      const families = parseInt(el('rFamilies').value, 10);
+      const vulnPct  = parseFloat(el('rVulnPct').value) || 0;
+
+      const ppFamily    = 5;
+      const daysSupport = 3;
+      const daysPerPack = 3;
+
+      if (!families || families <= 0){
+        alert('Please enter a valid number of affected families.');
+        return;
+      }
+      if (vulnPct <= 0 || vulnPct > 100){
+        alert('Please enter a valid vulnerability/poverty % between 1 and 100.');
+        return;
+      }
+
+      const totalPeople = families * ppFamily;
+      const vulnFamilies = ceil(families * (vulnPct / 100));
+      const vulnPeople   = vulnFamilies * ppFamily;
+
+      const foodPacks = ceil(vulnFamilies * (daysSupport / daysPerPack));
+
+      const hygieneKits  = vulnFamilies;
+      const kitchenSets  = vulnFamilies;
+      const sleepingKits = vulnFamilies;
+
+      const costHygiene  = parseFloat(el('cHygiene').value)  || 0;
+      const costKitchen  = parseFloat(el('cKitchen').value)  || 0;
+      const costSleeping = parseFloat(el('cSleeping').value) || 0;
+      const costFood     = parseFloat(el('cFood').value)     || 0;
+
+      const totalCostFood     = foodPacks    * costFood;
+      const totalCostHygiene  = hygieneKits  * costHygiene;
+      const totalCostKitchen  = kitchenSets  * costKitchen;
+      const totalCostSleeping = sleepingKits * costSleeping;
+      const grandTotal = totalCostFood + totalCostHygiene + totalCostKitchen + totalCostSleeping;
+
+      const prov = el('rProvince').value.trim();
+      const mun  = el('rMunicipality').value.trim();
+      const brgy = el('rBarangay').value.trim();
+      const locParts = [brgy, mun, prov].filter(Boolean);
+
+      const now = new Date();
+      const stamp = now.toLocaleString();
+      const headerLines = [];
+      headerLines.push('<strong>Relief Computation Summary</strong>');
+      headerLines.push(`<div><b>Generated:</b> ${stamp}</div>`);
+      if (locParts.length){
+        headerLines.push(`<div><b>Location:</b> ${locParts.join(', ')}</div>`);
+      }
+      headerLines.push(`<div><b>Affected families:</b> ${families.toLocaleString()}</div>`);
+      headerLines.push(`<div><b>Vulnerable families:</b> ${vulnFamilies.toLocaleString()} (${vulnPct}%)</div>`);
+      el('reliefPrintHeader').innerHTML = headerLines.join('');
+      el('reliefPrintHeader').style.display = 'block';
+
+      const buildTable = (title, rows) => {
+        let html = `<h3 style="margin:14px 0 6px;">${title}</h3>`;
+        html += '<table><tr><th>Item</th><th>Quantity / Value</th></tr>';
+        for (const r of rows){
+          html += `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`;
+        }
+        html += '</table>';
+        return html;
+      };
+
+      const summaryRows = [
+        ['Affected families', families.toLocaleString()],
+        ['Vulnerable families', vulnFamilies.toLocaleString()],
+        ['Total population (approx.)', totalPeople.toLocaleString()]
+      ];
+
+      const foodRows = [
+        ['Standard Food Packs (3-day coverage)', foodPacks.toLocaleString()]
+      ];
+
+      const nfiRows = [
+        ['Hygiene Kits', hygieneKits.toLocaleString()],
+        ['Kitchen Sets', kitchenSets.toLocaleString()],
+        [
+          'Sleeping Kits <br><small>(2 Plastic Mats, 2 Blankets, 2 Mosquito Nets per family)</small>',
+          sleepingKits.toLocaleString()
+        ]
+      ];
+
+      const costRows = [
+        ['Food Packs', `₱ ${totalCostFood.toLocaleString()}`],
+        ['Hygiene Kits', `₱ ${totalCostHygiene.toLocaleString()}`],
+        ['Kitchen Sets', `₱ ${totalCostKitchen.toLocaleString()}`],
+        ['Sleeping Kits', `₱ ${totalCostSleeping.toLocaleString()}`],
+        ['<b>Grand Total</b>', `<b>₱ ${grandTotal.toLocaleString()}</b>`]
+      ];
+
+      let out = '';
+      out += buildTable('Population Summary', summaryRows);
+      out += buildTable('Food Requirements', foodRows);
+      out += buildTable('Non-Food Items (NFI Sets)', nfiRows);
+      out += buildTable('Estimated Cost Summary', costRows);
+
+      el('reliefResults').innerHTML = out;
+    }
+
+    function onDownloadRelief(){
+      if (!el('reliefResults').innerHTML.trim()){
+        alert('Please compute relief results first before exporting to PDF.');
+        return;
+      }
+      window.print();
+    }
+
+    /* ===================== WASH (OUTSIDE EC) LOGIC ===================== */
+    function computeWash() {
+    // Get input type (individuals or families)
+    const inputType = el('wInputType').value;
+
+    // Raw input from the number field
+    let raw = parseInt(el('wPeople').value, 10);
+    if (!raw || raw <= 0) {
+        alert('Please enter a valid number for WASH calculation.');
+        return;
+    }
+
+    // Family conversion
+    const avgFamilySize = 5; // change this if needed
+
+    // Convert if families
+    let people = (inputType === 'families') ? raw * avgFamilySize : raw;
+
+    const litersPerPerson = 15; // Sphere minimum
+
+    // --- Existing computations (no change needed) ---
+    const dailyWaterL  = people * litersPerPerson;
+    const dailyWaterM3 = dailyWaterL / 1000;
+    const tapStands    = ceil(people / 250);
+
+
+      const prov = el('wProvince').value.trim();
+      const mun  = el('wMunicipality').value.trim();
+      const brgy = el('wBarangay').value.trim();
+      const locParts = [brgy, mun, prov].filter(Boolean);
+
+      const now = new Date();
+      const stamp = now.toLocaleString();
+      const headerLines = [];
+      headerLines.push('<strong>WASH Needs Summary (Outside EC)</strong>');
+      headerLines.push(`<div><b>Generated:</b> ${stamp}</div>`);
+      if (locParts.length){
+        headerLines.push(`<div><b>Location:</b> ${locParts.join(', ')}</div>`);
+      }
+      headerLines.push(`<div><b>Affected individuals:</b> ${people.toLocaleString()}</div>`);
+      headerLines.push(`<div><b>Water standard:</b> 15 L/person/day (Sphere minimum)</div>`);
+      el('washPrintHeader').innerHTML = headerLines.join('');
+      el('washPrintHeader').style.display = 'block';
+
+      const buildTable = (title, rows) => {
+        let html = `<h3 style="margin:14px 0 6px;">${title}</h3>`;
+        html += '<table><tr><th>Item</th><th>Requirement</th></tr>';
+        for (const r of rows){
+          html += `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`;
+        }
+        html += '</table>';
+        return html;
+      };
+
+      const waterRows = [
+        ['Population covered', `${people.toLocaleString()} people`],
+        ['Daily water requirement', `${dailyWaterL.toLocaleString()} L/day (${dailyWaterM3.toFixed(1)} m³/day)`],
+        ['Tap stands (1:250 people)', tapStands.toLocaleString()]
+      ];
+
+      let out = '';
+      out += buildTable('Water Supply Requirements (Daily)', waterRows);
+
+      el('washResults').innerHTML = out;
+    }
+
+    function onDownloadWash(){
+      if (!el('washResults').innerHTML.trim()){
+        alert('Please compute WASH results first before exporting to PDF.');
+        return;
+      }
+      window.print();
+    }
+
+    /* ===================== MANAGEMENT OF THE DEAD LOGIC ===================== */
+    function computeBurial(){
+      const pop = parseInt(el('bPopulation').value, 10) || 0;
+      const bodies = parseInt(el('bBodies').value, 10);
+      const muslim = parseInt(el('bMuslim').value, 10) || 0;
+
+      if (!bodies || bodies <= 0){
+        alert('Please enter a valid number of bodies for burial.');
+        return;
+      }
+      if (muslim > bodies){
+        alert('Muslim burials cannot be more than total bodies.');
+        return;
+      }
+
+      let nonMuslim = bodies - muslim;
+      if (nonMuslim < 0) nonMuslim = 0;
+      el('bNonMuslim').value = nonMuslim;
+
+      let scaleLabel, wellDistance;
+      if (bodies <= 4){
+        scaleLabel = 'Very small / scattered burial (<5 bodies)';
+        wellDistance = 200;
+      } else if (bodies <= 60){
+        scaleLabel = 'Small burial site (5–60 bodies)';
+        wellDistance = 250;
+      } else {
+        scaleLabel = 'Large burial site (>60 bodies)';
+        wellDistance = 350;
+      }
+
+      let areaPopSqm = 0, areaPopHa = 0;
+      if (pop > 0){
+        areaPopSqm = (pop / 10000) * 1500;
+        areaPopHa = areaPopSqm / 10000;
+      }
+
+      const areaMuslimSqm    = muslim    * 10;
+      const areaNonMuslimSqm = nonMuslim * 10;
+      const areaBodiesSqm    = bodies    * 10;
+      const areaMuslimHa     = areaMuslimSqm / 10000;
+      const areaNonMuslimHa  = areaNonMuslimSqm / 10000;
+      const areaBodiesHa     = areaBodiesSqm / 10000;
+
+      let areaPlanSqm = areaBodiesSqm;
+      let basis = 'Grave-count rule (~10 m² per body)';
+      if (areaPopSqm > 0 && areaPopSqm > areaBodiesSqm){
+        areaPlanSqm = areaPopSqm;
+        basis = 'Population rule (1,500 m² per 10,000 people)';
+      }
+      const areaPlanHa = areaPlanSqm / 10000;
+
+      const prov = el('bProvince').value.trim();
+      const mun  = el('bMunicipality').value.trim();
+      const brgy = el('bBarangay').value.trim();
+      const locParts = [brgy, mun, prov].filter(Boolean);
+
+      const now = new Date();
+      const stamp = now.toLocaleString();
+      const headerLines = [];
+      headerLines.push('<strong>Management of the Dead — Summary</strong>');
+      headerLines.push(`<div><b>Generated:</b> ${stamp}</div>`);
+      if (locParts.length){
+        headerLines.push(`<div><b>Location:</b> ${locParts.join(', ')}</div>`);
+      }
+      headerLines.push(`<div><b>Estimated bodies for burial:</b> ${bodies.toLocaleString()}</div>`);
+      if (pop > 0){
+        headerLines.push(`<div><b>Population served (approx.):</b> ${pop.toLocaleString()}</div>`);
+      }
+      headerLines.push(`<div><b>Burial scale:</b> ${scaleLabel}</div>`);
+      el('burialPrintHeader').innerHTML = headerLines.join('');
+      el('burialPrintHeader').style.display = 'block';
+
+      const buildTable = (title, rows) => {
+        let html = `<h3 style="margin:14px 0 6px;">${title}</h3>`;
+        html += '<table><tr><th>Item</th><th>Guideline</th></tr>';
+        for (const r of rows){
+          html += `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`;
+        }
+        html += '</table>';
+        return html;
+      };
+
+      const distanceRows = [
+        ['Burial scale', scaleLabel],
+        ['Min. distance to drinking-water sources',
+          `≈ ${wellDistance} m (rule of thumb: 200 m for <5; 250 m for 5–60; 350 m for >60 bodies)`],
+        ['Suggested distance from nearest settlement',
+          '≥ 500 m from houses / community'],
+        ['Typical grave depth', '1.5–3 m'],
+        ['Minimum soil cover above body',
+          '≥ 1 m compact soil (no exposure; protection from animals)'],
+        ['Vertical separation to highest water table',
+          'Target ≥ 1.5–2 m between grave bottom and water table (more conservative for trench / mass graves)']
+      ];
+
+      const areaRows = [
+        ['Population-based area (1,500 m² / 10,000 people)',
+          pop > 0
+            ? `${Math.round(areaPopSqm).toLocaleString()} m² (${areaPopHa.toFixed(2)} ha)`
+            : 'N/A (population not provided)'],
+        ['Muslim section (~10 m² per body)',
+          muslim > 0
+            ? `${Math.round(areaMuslimSqm).toLocaleString()} m² (${areaMuslimHa.toFixed(2)} ha)`
+            : '0 m² (no Muslim burials entered)'],
+        ['Non-Muslim section (~10 m² per body)',
+          nonMuslim > 0
+            ? `${Math.round(areaNonMuslimSqm).toLocaleString()} m² (${areaNonMuslimHa.toFixed(2)} ha)`
+            : '0 m² (no Non-Muslim burials)'],
+        ['Total grave-based area (~10 m² per body)',
+          `${Math.round(areaBodiesSqm).toLocaleString()} m² (${areaBodiesHa.toFixed(2)} ha)`],
+        ['Suggested planning area (total cemetery site)',
+          `${Math.round(areaPlanSqm).toLocaleString()} m² (${areaPlanHa.toFixed(2)} ha) — based on ${basis}`]
+      ];
+
+      const faithRows = [
+        ['Muslim burials (separate block)', muslim.toLocaleString()],
+        ['Non-Muslim burials', nonMuslim.toLocaleString()],
+        ['Key notes',
+         'Muslim burials should be grouped in a dedicated area, facing Qibla as feasible, with immediate burial and no mixing with non-Muslim graves. Coordinate layout with religious leaders.']
+      ];
+
+      let out = '';
+      out += buildTable('Distances & Depth Guidelines', distanceRows);
+      out += buildTable('Estimated Cemetery Area', areaRows);
+      out += buildTable('Religious & Cultural Requirements', faithRows);
+
+      el('burialResults').innerHTML = out;
+    }
+
+    function onDownloadBurial(){
+      if (!el('burialResults').innerHTML.trim()){
+        alert('Please compute MDM planning results first before exporting to PDF.');
+        return;
+      }
+      window.print();
+    }
+
+    /* ===================== SHELTER IN RECOVERY LOGIC ===================== */
+    function updateRecoveryMode(){
+      const recMode = el('recMode').value;
+      el('recHouseholdInputs').style.display = recMode === 'households' ? 'block' : 'none';
+      el('recAreaInputs').style.display       = recMode === 'area' ? 'block' : 'none';
+      el('recAreaNote').innerHTML = '&nbsp;';
+      el('recoveryResults').innerHTML = '';
+      el('recoveryPrintHeader').style.display = 'none';
+    }
+
+    function updateRecoveryAreaType(){
+      const t = el('recAreaType').value;
+      if (t === 'rect'){
+        el('recAreaValueRow').style.display = 'none';
+        el('recRectRow').style.display      = 'block';
+      } else {
+        el('recAreaValueRow').style.display = 'block';
+        el('recRectRow').style.display      = 'none';
+      }
+      el('recAreaNote').innerHTML = '&nbsp;';
+    }
+
+    function computeRecovery(){
+      const recMode = el('recMode').value;
+      const ppHouse = 5; // fixed
+
+      const lotSizeSqm   = 10 * 10;   // 100 m² per household
+      const houseSizeSqm = 3.5 * 6.0; // 21 m² per household
+
+      let hh = 0;
+      let totalSiteSqm = 0;
+      let modeDesc = '';
+
+      if (recMode === 'households'){
+        hh = parseInt(el('recHouseholds').value, 10);
+        if (!hh || hh <= 0){
+          alert('Please enter a valid number of households.');
+          return;
+        }
+        totalSiteSqm = hh * lotSizeSqm;
+        modeDesc = 'Household-based (10 m × 10 m per household)';
+        el('recAreaNote').innerHTML = '&nbsp;';
+      } else {
+        const areaType = el('recAreaType').value;
+        if (areaType === 'sqm'){
+          const val = parseFloat(el('recAreaValue').value);
+          if (!val || val <= 0){ alert('Please enter a valid site area in m².'); return; }
+          totalSiteSqm = val;
+          modeDesc = 'Area-based (square meters)';
+          el('recAreaNote').innerHTML = `${val.toLocaleString()} m² total site area`;
+        } else if (areaType === 'ha'){
+          const val = parseFloat(el('recAreaValue').value);
+          if (!val || val <= 0){ alert('Please enter a valid site area in hectares.'); return; }
+          totalSiteSqm = val * 10000;
+          modeDesc = 'Area-based (hectares)';
+          el('recAreaNote').innerHTML = `${val} ha = <b>${totalSiteSqm.toLocaleString()}</b> m²`;
+        } else if (areaType === 'rect'){
+          const L = parseFloat(el('recLength').value);
+          const W = parseFloat(el('recWidth').value);
+          if (!L || L <= 0 || !W || W <= 0){ alert('Please enter valid length and width in meters.'); return; }
+          totalSiteSqm = L * W;
+          modeDesc = 'Area-based (Length × Width in meters)';
+          el('recAreaNote').innerHTML =
+            `${L} m × ${W} m = <b>${totalSiteSqm.toLocaleString()}</b> m² (${(totalSiteSqm/10000).toFixed(2)} ha)`;
+        }
+
+        hh = Math.floor(totalSiteSqm / lotSizeSqm);
+        if (hh <= 0){
+          alert('Site area is too small for even one 10 m × 10 m plot.');
+          return;
+        }
+      }
+
+      const totalPeople       = hh * ppHouse;
+      const totalLotAreaSqm   = hh * lotSizeSqm;
+      const totalLotAreaHa    = totalLotAreaSqm / 10000;
+      const totalHouseAreaSqm = hh * houseSizeSqm;
+
+      const coveredPerPerson = totalHouseAreaSqm / totalPeople;
+      const sphereMinCovered = 3.5;
+      const meetsSphere = coveredPerPerson >= sphereMinCovered;
+
+      const openSpacePerLot = lotSizeSqm - houseSizeSqm;
+
+      const prov = el('recProvince').value.trim();
+      const mun  = el('recMunicipality').value.trim();
+      const brgy = el('recBarangay').value.trim();
+      const locParts = [brgy, mun, prov].filter(Boolean);
+
+      const now = new Date();
+      const stamp = now.toLocaleString();
+      const headerLines = [];
+      headerLines.push('<strong>Shelter in Recovery — Summary</strong>');
+      headerLines.push(`<div><b>Generated:</b> ${stamp}</div>`);
+      if (locParts.length){
+        headerLines.push(`<div><b>Location:</b> ${locParts.join(', ')}</div>`);
+      }
+      headerLines.push(`<div><b>Mode:</b> ${modeDesc}</div>`);
+      headerLines.push(`<div><b>Households that can be accommodated:</b> ${hh.toLocaleString()}</div>`);
+      headerLines.push(`<div><b>Estimated population:</b> ${totalPeople.toLocaleString()} (at 5 persons/household)</div>`);
+      el('recoveryPrintHeader').innerHTML = headerLines.join('');
+      el('recoveryPrintHeader').style.display = 'block';
+
+      const buildTable = (title, rows, headings=['Item','Value']) => {
+        let html = `<h3 style="margin:14px 0 6px;">${title}</h3>`;
+        html += `<table><tr><th>${headings[0]}</th><th>${headings[1]}</th></tr>`;
+        for (const r of rows){
+          html += `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`;
+        }
+        html += '</table>';
+        return html;
+      };
+
+      const areaRows = [
+        ['Lot size per household', `${lotSizeSqm} m² (10 m × 10 m)`],
+        ['House footprint per household', `${houseSizeSqm} m² (3.5 m × 6.0 m)`],
+        ['Open space per lot (yard / setbacks)', `${openSpacePerLot} m²`],
+        ['Total plot area for all households (used)', `${totalLotAreaSqm.toLocaleString()} m² (${totalLotAreaHa.toFixed(2)} ha)`],
+        ['Total site area (available input)', `${totalSiteSqm.toLocaleString()} m² (${(totalSiteSqm/10000).toFixed(2)} ha)`]
+      ];
+
+      const sphereRows = [
+        ['Covered area per person (actual)', `${coveredPerPerson.toFixed(2)} m²/person`],
+        ['Sphere / UNHCR minimum covered area', `${sphereMinCovered.toFixed(1)} m²/person (minimum)`],
+        ['Meets minimum covered space standard?',
+          meetsSphere ? 'Yes — meets or exceeds 3.5 m²/person' : 'No — below 3.5 m²/person; adjust house size or occupancy.']
+      ];
+
+      const spacingRows = [
+        ['Minimum distance between individual houses',
+          '≥ 2 m clear space between shelters/buildings (fire safety & collapse risk).'],
+        ['Distance between clusters of houses',
+          '≈ 6 m between shelter clusters (for circulation & fire safety).'],
+        ['Distance between larger blocks of housing',
+          '≈ 15 m between blocks; additional 30 m firebreak for every 300 m of built-up area.'],
+        ['Access road width — main roads',
+          '≥ 6 m, or wide enough for two vehicles side by side for emergency access.'],
+        ['Access road width — secondary / lanes',
+          '≈ 3 m minimum for light vehicle or service access; keep clear of obstacles.'],
+        ['House-to-house separation & privacy',
+          'Use remaining lot space (100 m² – 21 m² house) for setback, small garden, WASH line, and safe distance from neighbouring houses.']
+      ];
+
+      const densityRows = [
+        ['Average plot density (based on plot area used)',
+          `${(totalPeople / totalLotAreaHa).toFixed(0)} persons per hectare`],
+        ['Notes',
+          'Actual liveability also depends on community facilities (schools, health posts, markets, open spaces) which will require additional land beyond the 10 m × 10 m plots.']
+      ];
+
+      let out = '';
+      out += buildTable('Plot and House Areas', areaRows);
+      out += buildTable('Sphere / UNHCR Covered Area Check', sphereRows);
+      out += buildTable('Spatial Standards — Distances & Access Roads', spacingRows);
+      out += buildTable('Settlement Density (Indicative)', densityRows);
+
+      el('recoveryResults').innerHTML = out;
+    }
+
+    function onDownloadRecovery(){
+      if (!el('recoveryResults').innerHTML.trim()){
+        alert('Please compute recovery shelter results first before exporting to PDF.');
+        return;
+      }
+      window.print();
+    }
+
+    /* -------- Event Wiring -------- */
+    // Camp
+    el('mode').addEventListener('change', updateVisibility);
+    el('compute').addEventListener('click', onCompute);
+    el('downloadPdf').addEventListener('click', onDownload);
+
+    el('area').addEventListener('input', () => {
+      if (el('mode').value==='area') {
+        let area = parseFloat(el('area').value);
+        const unit = el('unit').value;
+        if (!area || area <= 0){ el('conversionNote').innerHTML='&nbsp;'; return; }
+        el('conversionNote').innerHTML =
+          unit==='ha'
+            ? `${area.toLocaleString()} ha = <b>${(area*10000).toLocaleString()}</b> m²`
+            : `${area.toLocaleString()} m² = <b>${(area/10000).toFixed(2)}</b> ha`;
+      }
+    });
+
+    el('unit').addEventListener('change', () => {
+      if (el('mode').value==='area') {
+        let area = parseFloat(el('area').value);
+        if (!area || area <= 0){ el('conversionNote').innerHTML='&nbsp;'; return; }
+        el('conversionNote').innerHTML =
+          el('unit').value==='ha'
+            ? `${area.toLocaleString()} ha = <b>${(area*10000).toLocaleString()}</b> m²`
+            : `${area.toLocaleString()} m² = <b>${(area/10000).toFixed(2)}</b> ha`;
+      }
+    });
+
+    el('families').addEventListener('input', () => {
+      if (el('mode').value==='families'){
+        const families = parseInt(el('families').value,10);
+        const ppFamily = 5;
+        if (!families || families <= 0){ el('familiesNote').innerHTML='&nbsp;'; return; }
+        const people = families * ppFamily;
+        el('familiesNote').innerHTML = `${families.toLocaleString()} families × ${ppFamily} pp/family = <b>${people.toLocaleString()}</b> people`;
+      }
+    });
+
+    el('mode').dispatchEvent(new Event('change')); // init
+
+    // Relief
+    el('rCompute').addEventListener('click', computeRelief);
+    el('rDownloadPdf').addEventListener('click', onDownloadRelief);
+
+    // WASH
+    el('wCompute').addEventListener('click', computeWash);
+    el('wDownloadPdf').addEventListener('click', onDownloadWash);
+
+    // Management of the Dead
+    el('bCompute').addEventListener('click', computeBurial);
+    el('bDownloadPdf').addEventListener('click', onDownloadBurial);
+
+    // Recovery
+    el('recMode').addEventListener('change', updateRecoveryMode);
+    el('recAreaType').addEventListener('change', updateRecoveryAreaType);
+    el('recCompute').addEventListener('click', computeRecovery);
+    el('recDownloadPdf').addEventListener('click', onDownloadRecovery);
+
+    updateRecoveryMode();
+    updateRecoveryAreaType();
+  </script>
+<footer style="text-align:center; padding:20px; font-size:12px; color:#666;">
+    © 2025 Developed by Ian Zambrano • Philippine Red Cross (Personal Tool Prototype)
+</footer>
+</body>
+</html>
