@@ -1613,5 +1613,19 @@ header {
 <footer style="text-align:center; padding:20px; font-size:12px; color:#666;">
     © 2025 Developed by Ian Zambrano • Philippine Red Cross (Personal Tool Prototype)
 </footer>
+<footer class="site-disclaimer" style="text-align:center; padding:10px 20px; font-size:11px; color:#777; max-width:900px; margin:0 auto 20px;">
+  <p><strong>Disclaimer:</strong> This tool is a personal prototype created for rapid planning and estimation purposes. 
+  It is <strong>not an official Philippine Red Cross system</strong> and should not replace technical assessments, 
+  field validation, or decisions made by authorized PRC units. All computations are estimates based on humanitarian 
+  standards and may vary depending on real conditions on the ground.</p>
+</footer>
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("service-worker.js")
+      .then(() => console.log("Service Worker Registered"))
+      .catch(err => console.log("SW registration failed:", err));
+  }
+</script>
+
 </body>
 </html>
